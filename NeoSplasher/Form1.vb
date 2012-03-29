@@ -13,11 +13,6 @@ Public Class Form1
 
     Private m_bmp As System.Drawing.Bitmap
     Dim cohpath As String
-    Private Sub AppendByteToDisk(ByVal FilepathToAppendTo As String, ByRef Content() As Byte)
-        Dim s As New System.IO.FileStream(FilepathToAppendTo, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.ReadWrite)
-        s.Write(Content, 0, Content.Length)
-        s.Close()
-    End Sub
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Not Directory.Exists(System.Environment.CurrentDirectory & "\temp") Then
