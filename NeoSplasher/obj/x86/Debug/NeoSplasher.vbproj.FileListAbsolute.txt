@@ -1,0 +1,12 @@
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\bin\Debug\NeoSplasher.exe
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\bin\Debug\NeoSplasher.pdb
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\bin\Debug\NeoSplasher.xml
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\obj\x86\Debug\ResGen.read.1.tlog
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\obj\x86\Debug\ResGen.write.1.tlog
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\obj\x86\Debug\NeoSplasher.exe
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\obj\x86\Debug\NeoSplasher.xml
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\obj\x86\Debug\NeoSplasher.pdb
+C:\Users\Neo\documents\visual studio 2010\Projects\NeoSplasher\NeoSplasher\bin\Debug\DevIL.NET2.dll
