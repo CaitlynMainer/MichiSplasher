@@ -19,11 +19,6 @@ Public Class Form1
         s.Close()
     End Sub
 
-    Public Shared Function StrToByteArray(ByVal str As String) As Byte()
-        Dim encoding As New System.Text.UTF8Encoding()
-        Return encoding.GetBytes(str)
-    End Function 'StrToByteArray
-
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Not Directory.Exists(System.Environment.CurrentDirectory & "\temp") Then
             Directory.CreateDirectory(System.Environment.CurrentDirectory & "\temp")
@@ -104,11 +99,12 @@ Public Class Form1
     End Sub
 
     Private Sub mnuHelpAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuHelpAbout.Click
-        'MessageBox.Show("Program by Marco Mastropaolo\n\nThis is a VB.NET example for the DevIL.NET library.\n\nhttp://www.mastropaolo.com", "About")
+        MessageBox.Show("Neo Shadowdream A.K.A Joshua Mainer", "About")
     End Sub
 
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Label3.Text = "Working..."
         If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
             File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
         End If
@@ -119,7 +115,6 @@ Public Class Form1
 
         DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
         Dim proc As Process = New Process
-
         proc.StartInfo.FileName = System.Environment.CurrentDirectory & "/nvcompress.exe"
         proc.StartInfo.Arguments() = "-rgb ""temp\output.png"" ""temp\COH_LogInScreen_Background_temp.dds"""
         proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
@@ -139,6 +134,8 @@ Public Class Form1
         If File.Exists(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds") Then
             File.Delete(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds")
         End If
+
+        Label3.Text = "Done!"
 
     End Sub
 
