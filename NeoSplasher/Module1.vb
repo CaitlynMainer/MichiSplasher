@@ -10,6 +10,19 @@ Imports Microsoft.Win32
 
 Module Module1
 
+    Public Function LoadSiteContent(ByVal url As String) As String
+        Dim client As New WebClient()
+        client.Proxy = GlobalProxySelection.GetEmptyWebProxy()
+        Dim html As Byte() = client.DownloadData(url)
+        Dim utf As New UTF8Encoding()
+        Return utf.GetString(html)
+    End Function
+
+    Sub DownloadFile(ByVal uri As String, ByVal destFile As String, Optional ByVal username As String = Nothing, Optional ByVal pwd As String = Nothing)
+        Dim client As New WebClient()
+        client.Proxy = GlobalProxySelection.GetEmptyWebProxy()
+        client.DownloadFile(uri, destFile)
+    End Sub
 
     Public Function GetRegValue(ByVal thisHive As RegistryHive, _
     ByVal thisKey As String, ByVal thisValueName As String) As String
@@ -44,9 +57,6 @@ Module Module1
         End Try
         Return sAns
     End Function
-
-    Public Ver As String = "0.1.5"
-
 
     Public Sub MergeFiles(ByVal OutFile As String, ByVal ParamArray Files() As String)
         File.Copy(Files(0), OutFile, True) 'overwrites if exists.

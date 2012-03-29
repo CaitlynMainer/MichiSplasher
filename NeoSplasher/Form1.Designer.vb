@@ -85,12 +85,12 @@ Partial Class Form1
         '
         'mnuFileExit
         '
-        Me.mnuFileExit.Index = 3
+        Me.mnuFileExit.Index = 2
         Me.mnuFileExit.Text = "E&xit"
         '
         'mnuFileSep1
         '
-        Me.mnuFileSep1.Index = 2
+        Me.mnuFileSep1.Index = 1
         Me.mnuFileSep1.Text = "-"
         '
         'mainMenu
@@ -130,7 +130,7 @@ Partial Class Form1
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Menu = Me.mainMenu
         Me.Name = "Form1"
-        Me.Text = "NeoSplasher 0.1.5"
+        Me.Text = "title"
         CType(Me.pictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

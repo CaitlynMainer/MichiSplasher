@@ -3,6 +3,7 @@ Imports System.Drawing.Imaging
 Imports System.Drawing.Drawing2D
 Imports System.IO
 Imports System
+Imports System.Threading
 Imports System.Net
 Imports System.Text
 Imports System.Environment
@@ -22,6 +23,30 @@ Public Class Form1
         Dim encoding As New System.Text.UTF8Encoding()
         Return encoding.GetBytes(str)
     End Function 'StrToByteArray
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        If Not Directory.Exists(System.Environment.CurrentDirectory & "\temp") Then
+            Directory.CreateDirectory(System.Environment.CurrentDirectory & "\temp")
+        End If
+        Dim ver As String = "0.1.5"
+        Me.Text = "NeoSplasher Version: " & ver
+        Dim updaterversion As String = LoadSiteContent("http://pc-logix.com/neosplasher/version.ini")
+        If updaterversion > ver Then
+            MsgBox("Now Updating to " & updaterversion)
+            DownloadFile("http://pc-logix.com/neosplasher/neosplasher.exe", System.Environment.CurrentDirectory & "\neosplasher.updater")
+            File.Move(System.Environment.CurrentDirectory & "\neosplasher.exe", System.Environment.CurrentDirectory & "\neosplasher.old")
+            File.Move(System.Environment.CurrentDirectory & "\neosplasher.updater", System.Environment.CurrentDirectory & "\neosplasher.exe")
+            Process.Start(System.Environment.CurrentDirectory & "\neosplasherexe")
+            Thread.Sleep(2000)
+            Me.Close()
+        End If
+        Button2.Visible = False
+        cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\CoH\", "Installation Directory")
+        If cohpath = "" Then
+            cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\EUCoH\", "Installation Directory")
+        End If
+        TextBox1.Text = cohpath
+    End Sub
 
     Private Sub mnuFileOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuFileOpen.Click
         Dim ofd As New System.Windows.Forms.OpenFileDialog()
@@ -70,7 +95,6 @@ Public Class Form1
         End If
     End Sub
 
-
     Private Sub mnuFileSaveAs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
@@ -83,14 +107,6 @@ Public Class Form1
         'MessageBox.Show("Program by Marco Mastropaolo\n\nThis is a VB.NET example for the DevIL.NET library.\n\nhttp://www.mastropaolo.com", "About")
     End Sub
 
-    Private Sub frmImageView_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Button2.Visible = False
-        cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\CoH\", "Installation Directory")
-        If cohpath = "" Then
-            cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\EUCoH\", "Installation Directory")
-        End If
-        TextBox1.Text = cohpath
-    End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
@@ -103,13 +119,13 @@ Public Class Form1
 
         DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
         Dim proc As Process = New Process
-        'System.IO.File.Create(System.Environment.CurrentDirectory & "/COH_LogInScreen_Background_temp.dds")
+
         proc.StartInfo.FileName = System.Environment.CurrentDirectory & "/nvcompress.exe"
         proc.StartInfo.Arguments() = "-rgb ""temp\output.png"" ""temp\COH_LogInScreen_Background_temp.dds"""
         proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         proc.Start()
         proc.WaitForExit()
-        'TextBox1.Text = ("-rgb " & System.Environment.CurrentDirectory & "/output.png " & System.Environment.CurrentDirectory & "/COH_LogInScreen_Background_temp.dds")
+
         If Not Directory.Exists(TextBox1.Text & "\data\texture_library\GUI\CREATION\HybridUI\LoginScreen\") Then
             Directory.CreateDirectory(TextBox1.Text & "\data\texture_library\GUI\CREATION\HybridUI\LoginScreen\")
         End If
@@ -129,24 +145,22 @@ Public Class Form1
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
 
         Dim MyFolderBrowser As New System.Windows.Forms.FolderBrowserDialog
-
-        ' Descriptive text displayed above the tree view control in the dialog box
         MyFolderBrowser.Description = "Select the Folder"
-
-        ' Sets the root folder where the browsing starts from
-        'MyFolderBrowser.RootFolder = Environment.SpecialFolder.MyDocuments
-
-        ' Do not show the button for new folder
         MyFolderBrowser.ShowNewFolderButton = False
-
         Dim dlgResult As DialogResult = MyFolderBrowser.ShowDialog()
-
         If dlgResult = Windows.Forms.DialogResult.OK Then
             TextBox1.Text = MyFolderBrowser.SelectedPath
         End If
     End Sub
 
-    Private Sub mnuHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuHelp.Click
+    Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
+        Try
+            If File.Exists(System.Environment.CurrentDirectory & "\neosplasher.old") Then
+                File.Delete(System.Environment.CurrentDirectory & "\neosplasher.old")
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 End Class
