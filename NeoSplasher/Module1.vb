@@ -10,6 +10,27 @@ Imports Microsoft.Win32
 
 Module Module1
 
+    Private Function ByteArrayToString(ByVal arrInput() As Byte) As String
+        Dim sb As New System.Text.StringBuilder(arrInput.Length * 2)
+        For i As Integer = 0 To arrInput.Length - 1
+            sb.Append(arrInput(i).ToString("X2"))
+        Next
+        Return sb.ToString().ToLower
+    End Function
+
+    Public Function MD5CalcFile(ByVal filepath As String) As String
+        If File.Exists(filepath) Then
+            Using reader As New System.IO.FileStream(filepath, IO.FileMode.Open, IO.FileAccess.Read)
+                Using md5 As New System.Security.Cryptography.MD5CryptoServiceProvider
+                    Dim hash() As Byte = md5.ComputeHash(reader)
+                    Return ByteArrayToString(hash)
+                End Using
+            End Using
+        Else
+            Return "0"
+        End If
+    End Function
+
     Public Function LoadSiteContent(ByVal url As String) As String
         Dim client As New WebClient()
         client.Proxy = GlobalProxySelection.GetEmptyWebProxy()

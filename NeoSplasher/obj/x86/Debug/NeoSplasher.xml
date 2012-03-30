@@ -6,7 +6,20 @@ NeoSplasher
 </name>
 </assembly>
 <members>
-<member name="P:WindowsApplication1.My.Resources.Resources.ResourceManager">
+<member name="M:WindowsApplication1.FileHelper.GetFilesRecursive(System.String)">
+	<summary>
+ This method starts at the specified directory, and traverses all subdirectories.
+ It returns a List of those directories.
+ </summary>
+</member><member name="T:WindowsApplication1.FileHelper">
+	<summary>
+ This class contains directory helper method(s).
+ </summary>
+</member><member name="M:WindowsApplication1.Module2.Main">
+	<summary>
+ Entry point that shows usage of recursive directory function.
+ </summary>
+</member><member name="P:WindowsApplication1.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>

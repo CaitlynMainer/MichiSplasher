@@ -13,17 +13,18 @@ Public Class Form1
 
     Private m_bmp As System.Drawing.Bitmap
     Dim cohpath As String
-
+    Dim url As String = "http://pc-logix.com/neosplasher/"
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Not Directory.Exists(System.Environment.CurrentDirectory & "\temp") Then
             Directory.CreateDirectory(System.Environment.CurrentDirectory & "\temp")
         End If
+        DownloadFile(url & "md5.xml", CurDir() & "/md5.xml")
         Dim ver As String = "0.1.5"
         Me.Text = "NeoSplasher Version: " & ver
-        Dim updaterversion As String = LoadSiteContent("http://pc-logix.com/neosplasher/version.ini")
+        Dim updaterversion As String = LoadSiteContent(url & "version.ini")
         If updaterversion > ver Then
             MsgBox("Now Updating to " & updaterversion)
-            DownloadFile("http://pc-logix.com/neosplasher/neosplasher.exe", System.Environment.CurrentDirectory & "\neosplasher.updater")
+            DownloadFile(url & "neosplasher.exe", System.Environment.CurrentDirectory & "\neosplasher.updater")
             File.Move(System.Environment.CurrentDirectory & "\neosplasher.exe", System.Environment.CurrentDirectory & "\neosplasher.old")
             File.Move(System.Environment.CurrentDirectory & "\neosplasher.updater", System.Environment.CurrentDirectory & "\neosplasher.exe")
             Process.Start(System.Environment.CurrentDirectory & "\neosplasherexe")
@@ -36,6 +37,40 @@ Public Class Form1
             cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\EUCoH\", "Installation Directory")
         End If
         TextBox1.Text = cohpath
+
+        Dim hashfail As String = 0
+        Dim xmlDoc As New Xml.XmlDocument
+        xmlDoc.Load(CurDir() & "\md5.xml")
+        Dim nodes As Xml.XmlNodeList = xmlDoc.SelectNodes("/files/file")
+
+        For Each n As Xml.XmlNode In nodes
+            If Not IO.Directory.Exists(System.IO.Path.GetDirectoryName(CurDir() & "\" & n.ChildNodes(0).InnerText)) Then
+                IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(CurDir() & "\" & n.ChildNodes(0).InnerText))
+            End If
+
+            If File.Exists(CurDir() & "\" & n.ChildNodes(0).InnerText) Then
+                If MD5CalcFile(CurDir() & "\" & n.ChildNodes(0).InnerText) = n.ChildNodes(1).InnerText Then
+                Else
+                    Try
+                        DownloadFile(url & n.ChildNodes(0).InnerText, CurDir() & "\" & n.ChildNodes(0).InnerText)
+                        'MsgBox(row(0))
+                    Catch ex As Exception
+                        MessageBox.Show("Error: " & n.ChildNodes(0).InnerText & ex.Message)
+                    End Try
+                    hashfail = hashfail + 1
+                End If
+
+            Else
+
+                Try
+                    DownloadFile(url & n.ChildNodes(0).InnerText, CurDir() & "\" & n.ChildNodes(0).InnerText)
+                    'MsgBox(row(0))
+                Catch ex As Exception
+                    MessageBox.Show("Error: " & n.ChildNodes(0).InnerText & ex.Message)
+                End Try
+            End If
+        Next
+
     End Sub
 
     Private Sub mnuFileOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuFileOpen.Click
@@ -154,5 +189,38 @@ Public Class Form1
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub MenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem1.Click
+        Dim strFileSize As String = ""
+        Dim FILE_NAME As String = CurDir() & "\md5.xml"
+
+        Dim objWriter As New System.IO.StreamWriter(FILE_NAME)
+
+        objWriter.Write("<?xml version=""1.0"" encoding=""ISO-8859-1""?>" & vbCrLf & "<files>" & vbCrLf)
+
+        If System.IO.File.Exists(FILE_NAME) = True Then
+
+            Dim di As New IO.DirectoryInfo(System.Environment.CurrentDirectory & "/headers")
+            Dim aryFi As IO.FileInfo() = di.GetFiles("*.*")
+            Dim fi As IO.FileInfo
+            For Each fi In aryFi
+                objWriter.Write("<file>" & vbCrLf & Chr(9) & "<filename>\headers\" & fi.Name & "</filename>" & vbCrLf & Chr(9) & "<md5>" & MD5CalcFile(System.Environment.CurrentDirectory & "\headers\" & fi.Name) & "</md5>" & vbCrLf & "</file>" & vbCrLf)
+            Next
+
+            Dim di2 As New IO.DirectoryInfo(System.Environment.CurrentDirectory & "/")
+            Dim aryFi2 As IO.FileInfo() = di2.GetFiles("*.*")
+            Dim fi2 As IO.FileInfo
+            For Each fi2 In aryFi2
+                If Not fi2.Name = "md5.xml" Then
+                    objWriter.Write("<file>" & vbCrLf & Chr(9) & "<filename>\" & fi2.Name & "</filename>" & vbCrLf & Chr(9) & "<md5>" & MD5CalcFile(System.Environment.CurrentDirectory & "\" & fi2.Name) & "</md5>" & vbCrLf & "</file>" & vbCrLf)
+                End If
+            Next
+        Else
+        End If
+
+        objWriter.Write("</files>")
+        objWriter.Close()
+        MsgBox("Text written to file")
     End Sub
 End Class

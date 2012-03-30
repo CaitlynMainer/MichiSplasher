@@ -38,6 +38,7 @@ Partial Class Form1
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.MenuItem1 = New System.Windows.Forms.MenuItem()
         CType(Me.pictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -102,7 +103,7 @@ Partial Class Form1
         'mnuFile
         '
         Me.mnuFile.Index = 0
-        Me.mnuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.mnuFileOpen, Me.mnuFileSep1, Me.mnuFileExit})
+        Me.mnuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.mnuFileOpen, Me.mnuFileSep1, Me.mnuFileExit, Me.MenuItem1})
         Me.mnuFile.Text = "&File"
         '
         'mnuFileOpen
@@ -136,6 +137,11 @@ Partial Class Form1
         Me.Label3.Size = New System.Drawing.Size(52, 13)
         Me.Label3.TabIndex = 17
         Me.Label3.Text = "Waiting..."
+        '
+        'MenuItem1
+        '
+        Me.MenuItem1.Index = 3
+        Me.MenuItem1.Text = "Hash Files"
         '
         'Form1
         '
@@ -173,5 +179,6 @@ Partial Class Form1
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents MenuItem1 As System.Windows.Forms.MenuItem
 
 End Class

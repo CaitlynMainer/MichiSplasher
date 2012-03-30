@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<files>
+<file>
+	<filename>\headers\COH_LogInScreen_Background.header</filename>
+	<md5>5206ebd4e1015c34f7ca8722bb9e3f9d</md5>
+</file>
+<file>
+	<filename>\cudart32_30_14.dll</filename>
+	<md5>eca7d2828af021d221aad5fa859a7198</md5>
+</file>
+<file>
+	<filename>\DevIL.dll</filename>
+	<md5>59e291838ae2c88f5f71108e4845a84b</md5>
+</file>
+<file>
+	<filename>\DevIL.NET2.dll</filename>
+	<md5>33ff0d1e6963f2e7be1ca06ca99b9d2c</md5>
+</file>
+<file>
+	<filename>\ILU.dll</filename>
+	<md5>129d587d2d5db8a5ef7f052c995bce7f</md5>
+</file>
+<file>
+	<filename>\ILUT.dll</filename>
+	<md5>dcf38954481fe46d93d7f925230e3945</md5>
+</file>
+<file>
+	<filename>\jpeg62.dll</filename>
+	<md5>96995de4513551d49808b34b40ffb26a</md5>
+</file>
+<file>
+	<filename>\libpng12.dll</filename>
+	<md5>21d8af5b31e71727cf88c28cfd45a037</md5>
+</file>
+<file>
+	<filename>\libtiff3.dll</filename>
+	<md5>cfd09d054747280ed660ef7d79d0d443</md5>
+</file>
+<file>
+	<filename>\nvcompress.exe</filename>
+	<md5>7a5737418d7bf20caeb874b28c2d4fdc</md5>
+</file>
+<file>
+	<filename>\nvtt.dll</filename>
+	<md5>c5d1bafb9dd2f1dbb5ddfb568c380a51</md5>
+</file>
+<file>
+	<filename>\zlib1.dll</filename>
+	<md5>c7d4d685a0af2a09cbc21cb474358595</md5>
+</file>
+</files>
