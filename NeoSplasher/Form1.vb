@@ -19,7 +19,7 @@ Public Class Form1
             Directory.CreateDirectory(System.Environment.CurrentDirectory & "\temp")
         End If
         DownloadFile(url & "md5.xml", CurDir() & "/md5.xml")
-        Dim ver As String = "0.1.5"
+        Dim ver As String = "0.1.6"
         Me.Text = "NeoSplasher Version: " & ver
         Dim updaterversion As String = LoadSiteContent(url & "version.ini")
         If updaterversion > ver Then
@@ -27,7 +27,7 @@ Public Class Form1
             DownloadFile(url & "neosplasher.exe", System.Environment.CurrentDirectory & "\neosplasher.updater")
             File.Move(System.Environment.CurrentDirectory & "\neosplasher.exe", System.Environment.CurrentDirectory & "\neosplasher.old")
             File.Move(System.Environment.CurrentDirectory & "\neosplasher.updater", System.Environment.CurrentDirectory & "\neosplasher.exe")
-            Process.Start(System.Environment.CurrentDirectory & "\neosplasherexe")
+            Process.Start(System.Environment.CurrentDirectory & "\neosplasher.exe")
             Thread.Sleep(2000)
             Me.Close()
         End If
@@ -36,6 +36,19 @@ Public Class Form1
         If cohpath = "" Then
             cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\EUCoH\", "Installation Directory")
         End If
+
+        If cohpath = "" Then
+            MsgBox("Unable to find your City of Heroes install in your registry!")
+            Dim MyFolderBrowser As New System.Windows.Forms.FolderBrowserDialog
+            MyFolderBrowser.Description = "Select the Folder"
+            MyFolderBrowser.ShowNewFolderButton = False
+            Dim dlgResult As DialogResult = MyFolderBrowser.ShowDialog()
+            If dlgResult = Windows.Forms.DialogResult.OK Then
+                TextBox1.Text = MyFolderBrowser.SelectedPath
+            End If
+
+        End If
+
         TextBox1.Text = cohpath
 
         Dim hashfail As String = 0
@@ -106,9 +119,9 @@ Public Class Form1
             m_bmp = DevIL.DevIL.LoadBitmap(ofd.FileName)
 
             Dim original As Image = m_bmp
-            Dim resized As Image = ResizeImage(original, New Size(1024, 1024), False)
+            Dim resized As Image = ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), False)
 
-            Dim resized_small As Image = ResizeImage(original, New Size(256, 256), False)
+            Dim resized_small As Image = ResizeImage(original, New Size(348, 256), New Size(348, 256), False)
 
             Dim memStream As MemoryStream = New MemoryStream()
             resized.Save(memStream, ImageFormat.Bmp)
@@ -120,21 +133,12 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub mnuFileSaveAs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-    End Sub
-
     Private Sub mnuFileExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuFileExit.Click
         Me.Close()
     End Sub
 
-    Private Sub mnuHelpAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuHelpAbout.Click
-        MessageBox.Show("Neo Shadowdream A.K.A Joshua Mainer", "About")
-    End Sub
-
-
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        Label3.Text = "Working..."
+        Label12.Text = "Working..."
         If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
             File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
         End If
@@ -146,7 +150,7 @@ Public Class Form1
         DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
         Dim proc As Process = New Process
         proc.StartInfo.FileName = System.Environment.CurrentDirectory & "/nvcompress.exe"
-        proc.StartInfo.Arguments() = "-rgb ""temp\output.png"" ""temp\COH_LogInScreen_Background_temp.dds"""
+        proc.StartInfo.Arguments() = "-dxt5 ""temp\output.png"" ""temp\COH_LogInScreen_Background_temp.dds"""
         proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         proc.Start()
         proc.WaitForExit()
@@ -165,11 +169,11 @@ Public Class Form1
             File.Delete(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds")
         End If
 
-        Label3.Text = "Done!"
+        Label12.Text = "Done!"
 
     End Sub
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
 
         Dim MyFolderBrowser As New System.Windows.Forms.FolderBrowserDialog
         MyFolderBrowser.Description = "Select the Folder"
@@ -222,5 +226,17 @@ Public Class Form1
         objWriter.Write("</files>")
         objWriter.Close()
         MsgBox("Text written to file")
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Process.Start("http://openil.sourceforge.net/license.php")
+    End Sub
+
+    Private Sub LinkLabel2_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+        Process.Start("http://www.mastropaolo.com/devildotnet/")
+    End Sub
+
+    Private Sub LinkLabel3_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+        Process.Start("http://code.google.com/p/nvidia-texture-tools/wiki/CommandLineTools")
     End Sub
 End Class
