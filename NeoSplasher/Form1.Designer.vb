@@ -34,20 +34,22 @@ Partial Class Form1
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
-        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label11 = New System.Windows.Forms.Label()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label12 = New System.Windows.Forms.Label()
-        Me.Button8 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Button8 = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.Label13 = New System.Windows.Forms.Label()
         CType(Me.pictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -58,7 +60,8 @@ Partial Class Form1
         '
         Me.pictureBox.Location = New System.Drawing.Point(3, 3)
         Me.pictureBox.Name = "pictureBox"
-        Me.pictureBox.Size = New System.Drawing.Size(348, 256)
+        Me.pictureBox.Size = New System.Drawing.Size(341, 256)
+        Me.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pictureBox.TabIndex = 11
         Me.pictureBox.TabStop = False
         '
@@ -104,6 +107,8 @@ Partial Class Form1
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.CheckBox3)
+        Me.TabPage1.Controls.Add(Me.CheckBox1)
         Me.TabPage1.Controls.Add(Me.Label12)
         Me.TabPage1.Controls.Add(Me.Button2)
         Me.TabPage1.Controls.Add(Me.pictureBox)
@@ -119,6 +124,83 @@ Partial Class Form1
         Me.TabPage1.Text = "Loading Screen"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
+        'CheckBox3
+        '
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(354, 27)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(72, 17)
+        Me.CheckBox3.TabIndex = 20
+        Me.CheckBox3.Text = "Trim to Fit"
+        Me.CheckBox3.UseVisualStyleBackColor = True
+        Me.CheckBox3.Visible = False
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Checked = True
+        Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox1.Location = New System.Drawing.Point(354, 4)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(84, 17)
+        Me.CheckBox1.TabIndex = 18
+        Me.CheckBox1.Text = "Resize to Fit"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.CheckBox1.Visible = False
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(400, 246)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(52, 13)
+        Me.Label12.TabIndex = 17
+        Me.Label12.Text = "Waiting..."
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(350, 50)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(118, 23)
+        Me.Button2.TabIndex = 15
+        Me.Button2.Text = "Save Loading Screen"
+        Me.Button2.UseVisualStyleBackColor = True
+        Me.Button2.Visible = False
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(357, 246)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(40, 13)
+        Me.Label11.TabIndex = 16
+        Me.Label11.Text = "Status:"
+        '
+        'Button8
+        '
+        Me.Button8.Location = New System.Drawing.Point(416, 266)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(56, 23)
+        Me.Button8.TabIndex = 14
+        Me.Button8.Text = "Browse"
+        Me.Button8.UseVisualStyleBackColor = True
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(101, 266)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(309, 20)
+        Me.TextBox1.TabIndex = 12
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(0, 269)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(100, 13)
+        Me.Label8.TabIndex = 13
+        Me.Label8.Text = "City of Heroes path:"
+        '
         'TabPage2
         '
         Me.TabPage2.Controls.Add(Me.RichTextBox1)
@@ -130,57 +212,20 @@ Partial Class Form1
         Me.TabPage2.Controls.Add(Me.Label13)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Size = New System.Drawing.Size(438, 292)
+        Me.TabPage2.Size = New System.Drawing.Size(473, 292)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "About"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
-        'Label13
+        'RichTextBox1
         '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(8, 10)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(160, 13)
-        Me.Label13.TabIndex = 0
-        Me.Label13.Text = "Portions of code are provided by"
-        '
-        'LinkLabel1
-        '
-        Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(165, 10)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(131, 13)
-        Me.LinkLabel1.TabIndex = 1
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "DevIL Image Manipulation"
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(293, 10)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(10, 13)
-        Me.Label14.TabIndex = 2
-        Me.Label14.Text = ","
-        '
-        'LinkLabel2
-        '
-        Me.LinkLabel2.AutoSize = True
-        Me.LinkLabel2.Location = New System.Drawing.Point(302, 10)
-        Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(54, 13)
-        Me.LinkLabel2.TabIndex = 3
-        Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "DevIL.net"
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(351, 10)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(29, 13)
-        Me.Label15.TabIndex = 4
-        Me.Label15.Text = " And"
+        Me.RichTextBox1.Location = New System.Drawing.Point(11, 26)
+        Me.RichTextBox1.Name = "RichTextBox1"
+        Me.RichTextBox1.ReadOnly = True
+        Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Horizontal
+        Me.RichTextBox1.Size = New System.Drawing.Size(459, 263)
+        Me.RichTextBox1.TabIndex = 6
+        Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
         '
         'LinkLabel3
         '
@@ -192,74 +237,58 @@ Partial Class Form1
         Me.LinkLabel3.TabStop = True
         Me.LinkLabel3.Text = "NVidia"
         '
-        'RichTextBox1
+        'Label15
         '
-        Me.RichTextBox1.Location = New System.Drawing.Point(11, 26)
-        Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Horizontal
-        Me.RichTextBox1.Size = New System.Drawing.Size(402, 263)
-        Me.RichTextBox1.TabIndex = 6
-        Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(351, 10)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(29, 13)
+        Me.Label15.TabIndex = 4
+        Me.Label15.Text = " And"
         '
-        'Label8
+        'LinkLabel2
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(0, 269)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(100, 13)
-        Me.Label8.TabIndex = 13
-        Me.Label8.Text = "City of Heroes path:"
+        Me.LinkLabel2.AutoSize = True
+        Me.LinkLabel2.Location = New System.Drawing.Point(302, 10)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(54, 13)
+        Me.LinkLabel2.TabIndex = 3
+        Me.LinkLabel2.TabStop = True
+        Me.LinkLabel2.Text = "DevIL.net"
         '
-        'TextBox1
+        'Label14
         '
-        Me.TextBox1.Location = New System.Drawing.Point(101, 266)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(309, 20)
-        Me.TextBox1.TabIndex = 12
+        Me.Label14.AutoSize = True
+        Me.Label14.Location = New System.Drawing.Point(293, 10)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(10, 13)
+        Me.Label14.TabIndex = 2
+        Me.Label14.Text = ","
         '
-        'Label11
+        'LinkLabel1
         '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(357, 246)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(40, 13)
-        Me.Label11.TabIndex = 16
-        Me.Label11.Text = "Status:"
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Location = New System.Drawing.Point(165, 10)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(131, 13)
+        Me.LinkLabel1.TabIndex = 1
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "DevIL Image Manipulation"
         '
-        'Label12
+        'Label13
         '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(400, 246)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(52, 13)
-        Me.Label12.TabIndex = 17
-        Me.Label12.Text = "Waiting..."
-        '
-        'Button8
-        '
-        Me.Button8.Location = New System.Drawing.Point(416, 266)
-        Me.Button8.Name = "Button8"
-        Me.Button8.Size = New System.Drawing.Size(56, 23)
-        Me.Button8.TabIndex = 14
-        Me.Button8.Text = "Browse"
-        Me.Button8.UseVisualStyleBackColor = True
-        '
-        'Button2
-        '
-        Me.Button2.Location = New System.Drawing.Point(354, 6)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(118, 23)
-        Me.Button2.TabIndex = 15
-        Me.Button2.Text = "Save Loading Screen"
-        Me.Button2.UseVisualStyleBackColor = True
-        Me.Button2.Visible = False
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(8, 10)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(160, 13)
+        Me.Label13.TabIndex = 0
+        Me.Label13.Text = "Portions of code are provided by"
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(481, 318)
+        Me.ClientSize = New System.Drawing.Size(479, 318)
         Me.Controls.Add(Me.TabControl1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -299,5 +328,7 @@ Partial Class Form1
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
 
 End Class

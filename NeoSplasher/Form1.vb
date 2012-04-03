@@ -12,6 +12,7 @@ Imports Microsoft.Win32
 Public Class Form1
 
     Private m_bmp As System.Drawing.Bitmap
+    Dim original As Image
     Dim cohpath As String
     Dim url As String = "http://pc-logix.com/neosplasher/"
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -31,7 +32,6 @@ Public Class Form1
             Thread.Sleep(2000)
             Me.Close()
         End If
-        Button2.Visible = False
         cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\CoH\", "Installation Directory")
         If cohpath = "" Then
             cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\EUCoH\", "Installation Directory")
@@ -116,21 +116,43 @@ Public Class Form1
         ofd.Filter += "|All files (*.*)|*.*"
 
         If (ofd.ShowDialog() = DialogResult.OK) Then
+
+            If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
+                File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
+            End If
+
+            If File.Exists(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds") Then
+                File.Delete(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds")
+            End If
+
             m_bmp = DevIL.DevIL.LoadBitmap(ofd.FileName)
 
-            Dim original As Image = m_bmp
+            original = m_bmp
             Dim resized As Image = ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), False)
 
             Dim resized_small As Image = ResizeImage(original, New Size(348, 256), New Size(348, 256), False)
 
             Dim memStream As MemoryStream = New MemoryStream()
             resized.Save(memStream, ImageFormat.Bmp)
-            m_bmp = resized
+            'm_bmp = resized
             If Not (m_bmp Is Nothing) Then
                 pictureBox.Image = resized_small
                 Button2.Visible = True
             End If
+            CheckBox1.Visible = True
+            CheckBox3.Visible = True
+            CheckBox1.Checked = True
+            If Not original Is Nothing Then
+                resized.Save(memStream, ImageFormat.Bmp)
+                m_bmp = resized
+                If Not (m_bmp Is Nothing) Then
+                    pictureBox.Image = resized_small
+                    Button2.Visible = True
+                End If
+                DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
+            End If
         End If
+
     End Sub
 
     Private Sub mnuFileExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuFileExit.Click
@@ -139,18 +161,10 @@ Public Class Form1
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         Label12.Text = "Working..."
-        If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
-            File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
-        End If
 
-        If File.Exists(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds") Then
-            File.Delete(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds")
-        End If
-
-        DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
         Dim proc As Process = New Process
         proc.StartInfo.FileName = System.Environment.CurrentDirectory & "/nvcompress.exe"
-        proc.StartInfo.Arguments() = "-dxt5 ""temp\output.png"" ""temp\COH_LogInScreen_Background_temp.dds"""
+        proc.StartInfo.Arguments() = "-rgb -nomips ""temp\output.png"" ""temp\COH_LogInScreen_Background_temp.dds"""
         proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         proc.Start()
         proc.WaitForExit()
@@ -168,9 +182,7 @@ Public Class Form1
         If File.Exists(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds") Then
             File.Delete(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds")
         End If
-
         Label12.Text = "Done!"
-
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
@@ -239,4 +251,67 @@ Public Class Form1
     Private Sub LinkLabel3_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
         Process.Start("http://code.google.com/p/nvidia-texture-tools/wiki/CommandLineTools")
     End Sub
+
+    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
+        If CheckBox1.Checked = True Then
+            CheckBox3.Checked = False
+            If Not original Is Nothing Then
+                Dim resized As Image = ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), False)
+
+                Dim resized_small As Image = ResizeImage(original, New Size(341, 256), New Size(341, 256), False)
+
+                Dim memStream As MemoryStream = New MemoryStream()
+                resized.Save(memStream, ImageFormat.Bmp)
+                m_bmp = resized
+                If Not (m_bmp Is Nothing) Then
+                    pictureBox.Image = resized_small
+                    Button2.Visible = True
+                End If
+                DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
+            End If
+
+        Else
+            If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
+                File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
+            End If
+
+            If File.Exists(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds") Then
+                File.Delete(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds")
+            End If
+        End If
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox3.CheckedChanged
+        If CheckBox3.Checked = True Then
+            CheckBox1.Checked = False
+
+            If Not original Is Nothing Then
+                'Dim resized As Image = ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), False)
+
+                Dim resized As Image = TransformImage(ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), True), 1024, 768)
+                Dim resized_small As Image = TransformImage(ResizeImage(original, New Size(341, 256), New Size(341, 256), True), 341, 256)
+                resized_small = CropImage(original, New Size(1024, 768), New Point(0, 0))
+
+
+                Dim memStream As MemoryStream = New MemoryStream()
+                resized.Save(memStream, ImageFormat.Bmp)
+                m_bmp = resized
+                If Not (m_bmp Is Nothing) Then
+                    pictureBox.Image = resized_small
+                    Button2.Visible = True
+                End If
+                DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
+            End If
+
+        Else
+            If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
+                File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
+            End If
+
+            If File.Exists(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds") Then
+                File.Delete(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds")
+            End If
+        End If
+    End Sub
+
 End Class

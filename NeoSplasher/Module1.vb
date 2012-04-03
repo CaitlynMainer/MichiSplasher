@@ -116,15 +116,17 @@ Module Module1
     Public Function ResizeImage(ByVal image As Image, ByVal size As Size, ByVal size2 As Size, Optional ByVal preserveAspectRatio As Boolean = True) As Image
         Dim newWidth As Integer
         Dim newHeight As Integer
+
         If preserveAspectRatio Then
             Dim originalWidth As Integer = image.Width
             Dim originalHeight As Integer = image.Height
             Dim percentWidth As Single = CSng(size.Width) / CSng(originalWidth)
             Dim percentHeight As Single = CSng(size.Height) / CSng(originalHeight)
-            Dim percent As Single = If(percentHeight < percentWidth, percentHeight, percentWidth)
+            Dim percent As Single = If(percentHeight > percentWidth, percentHeight, percentWidth)
             newWidth = CInt(originalWidth * percent)
             newHeight = CInt(originalHeight * percent)
         Else
+
             newWidth = size2.Width
             newHeight = size2.Height
         End If
@@ -162,5 +164,32 @@ Module Module1
         End Try
 
     End Sub
+    Public Function TransformImage(ByVal img As Image, ByVal TargetWidth As Integer, ByVal TargetHeight As Integer) As Image
+        Dim Res As New Bitmap(TargetWidth, TargetHeight)
+        Dim g As Graphics = Graphics.FromImage(Res)
+        g.DrawImage(img, 0, 0, New Rectangle(0, 0, TargetWidth, TargetHeight), GraphicsUnit.Pixel)
+        g.Flush()
+        g.Dispose()
+        Return Res
+    End Function
+
+
+    'Firstly the following must be imported
+    'after that here is the function that would crop a photo
+    Public Function CropImage(ByVal SourceImage As Bitmap, ByVal NewSize As Size, ByVal StartPoint As Point) As Bitmap
+        ' Set up the rectangle that shows the portion of image to be cropped
+        Dim SourceRect As New Rectangle(StartPoint.X, StartPoint.Y, NewSize.Width, NewSize.Height)
+        ' Now set up the destination rectangle(DestRect) and bitmap(DestBmp)
+        Dim DestRect As New Rectangle(0, 0, NewSize.Width, NewSize.Height)
+        Dim DestBmp As New Bitmap(NewSize.Width, NewSize.Height, Imaging.PixelFormat.Format32bppArgb)
+        ' Set the graphics to the destination bitmap(DestBmp)
+        Dim g As Graphics = Graphics.FromImage(DestBmp)
+        ' and draw the image from source bitmap (SourceImage) to the 
+        ' destination bitmap(DestBmp) using the destination and
+        ' source rectangles.
+        g.DrawImage(SourceImage, DestRect, SourceRect, GraphicsUnit.Pixel)
+        ' finally return the destBmp
+        Return DestBmp
+    End Function
 
 End Module
