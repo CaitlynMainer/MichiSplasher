@@ -11,7 +11,7 @@ Imports Microsoft.Win32
 
 Public Class Form1
 
-    Private m_bmp As System.Drawing.Bitmap
+    Private m_bmp As Bitmap
     Dim original As Image
     Dim cohpath As String
     Dim url As String = "http://pc-logix.com/neosplasher/"
@@ -20,7 +20,7 @@ Public Class Form1
             Directory.CreateDirectory(System.Environment.CurrentDirectory & "\temp")
         End If
         DownloadFile(url & "md5.xml", CurDir() & "/md5.xml")
-        Dim ver As String = "0.1.6"
+        Dim ver As String = "0.1.8"
         Me.Text = "NeoSplasher Version: " & ver
         Dim updaterversion As String = LoadSiteContent(url & "version.ini")
         If updaterversion > ver Then
@@ -76,6 +76,10 @@ Public Class Form1
             Else
 
                 Try
+                    If Not Directory.Exists(Path.GetDirectoryName(CurDir() & "\" & n.ChildNodes(0).InnerText)) Then
+                        Directory.CreateDirectory(Path.GetDirectoryName(CurDir() & "\" & n.ChildNodes(0).InnerText))
+                    End If
+
                     DownloadFile(url & n.ChildNodes(0).InnerText, CurDir() & "\" & n.ChildNodes(0).InnerText)
                     'MsgBox(row(0))
                 Catch ex As Exception
@@ -128,28 +132,30 @@ Public Class Form1
             m_bmp = DevIL.DevIL.LoadBitmap(ofd.FileName)
 
             original = m_bmp
-            Dim resized As Image = ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), False)
-
-            Dim resized_small As Image = ResizeImage(original, New Size(348, 256), New Size(348, 256), False)
+            Dim resized As Image
 
             Dim memStream As MemoryStream = New MemoryStream()
-            resized.Save(memStream, ImageFormat.Bmp)
+
             'm_bmp = resized
+
+            imageresize()
             If Not (m_bmp Is Nothing) Then
-                pictureBox.Image = resized_small
                 Button2.Visible = True
             End If
             CheckBox1.Visible = True
+            CheckBox2.Visible = True
             CheckBox3.Visible = True
             CheckBox1.Checked = True
+            CheckBox2.Checked = False
+
+
+
             If Not original Is Nothing Then
-                resized.Save(memStream, ImageFormat.Bmp)
-                m_bmp = resized
                 If Not (m_bmp Is Nothing) Then
-                    pictureBox.Image = resized_small
+                    pictureBox.Image = CropImage(imageresize(), New Size(1024, 768), New Point(0, 0))
                     Button2.Visible = True
                 End If
-                DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
+                DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", imageresize())
             End If
         End If
 
@@ -202,6 +208,9 @@ Public Class Form1
             If File.Exists(System.Environment.CurrentDirectory & "\neosplasher.old") Then
                 File.Delete(System.Environment.CurrentDirectory & "\neosplasher.old")
             End If
+            If File.Exists(System.Environment.CurrentDirectory & "\neosplasher.updater") Then
+                File.Delete(System.Environment.CurrentDirectory & "\neosplasher.updater")
+            End If
         Catch ex As Exception
 
         End Try
@@ -222,6 +231,13 @@ Public Class Form1
             Dim fi As IO.FileInfo
             For Each fi In aryFi
                 objWriter.Write("<file>" & vbCrLf & Chr(9) & "<filename>\headers\" & fi.Name & "</filename>" & vbCrLf & Chr(9) & "<md5>" & MD5CalcFile(System.Environment.CurrentDirectory & "\headers\" & fi.Name) & "</md5>" & vbCrLf & "</file>" & vbCrLf)
+            Next
+
+            Dim dioverlay As New IO.DirectoryInfo(System.Environment.CurrentDirectory & "/overlay")
+            Dim aryFioverlay As IO.FileInfo() = dioverlay.GetFiles("*.*")
+            Dim fioverlay As IO.FileInfo
+            For Each fioverlay In aryFioverlay
+                objWriter.Write("<file>" & vbCrLf & Chr(9) & "<filename>\overlay\" & fioverlay.Name & "</filename>" & vbCrLf & Chr(9) & "<md5>" & MD5CalcFile(System.Environment.CurrentDirectory & "\overlay\" & fioverlay.Name) & "</md5>" & vbCrLf & "</file>" & vbCrLf)
             Next
 
             Dim di2 As New IO.DirectoryInfo(System.Environment.CurrentDirectory & "/")
@@ -254,22 +270,10 @@ Public Class Form1
 
     Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
         If CheckBox1.Checked = True Then
-            CheckBox3.Checked = False
-            If Not original Is Nothing Then
-                Dim resized As Image = ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), False)
-
-                Dim resized_small As Image = ResizeImage(original, New Size(341, 256), New Size(341, 256), False)
-
-                Dim memStream As MemoryStream = New MemoryStream()
-                resized.Save(memStream, ImageFormat.Bmp)
-                m_bmp = resized
-                If Not (m_bmp Is Nothing) Then
-                    pictureBox.Image = resized_small
-                    Button2.Visible = True
-                End If
-                DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
+            imageresize()
+            If CheckBox2.Checked = True Then
+                overlayimage()
             End If
-
         Else
             If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
                 File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
@@ -283,26 +287,10 @@ Public Class Form1
 
     Private Sub CheckBox3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox3.CheckedChanged
         If CheckBox3.Checked = True Then
-            CheckBox1.Checked = False
-
-            If Not original Is Nothing Then
-                'Dim resized As Image = ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), False)
-
-                Dim resized As Image = TransformImage(ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), True), 1024, 768)
-                Dim resized_small As Image = TransformImage(ResizeImage(original, New Size(341, 256), New Size(341, 256), True), 341, 256)
-                resized_small = CropImage(original, New Size(1024, 768), New Point(0, 0))
-
-
-                Dim memStream As MemoryStream = New MemoryStream()
-                resized.Save(memStream, ImageFormat.Bmp)
-                m_bmp = resized
-                If Not (m_bmp Is Nothing) Then
-                    pictureBox.Image = resized_small
-                    Button2.Visible = True
-                End If
-                DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
+            trimimage()
+            If CheckBox2.Checked = True Then
+                overlayimage()
             End If
-
         Else
             If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
                 File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
@@ -313,5 +301,93 @@ Public Class Form1
             End If
         End If
     End Sub
+
+    Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged
+        If CheckBox2.Checked = True Then
+            overlayimage()
+        Else
+
+            If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
+                File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
+            End If
+
+            If File.Exists(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds") Then
+                File.Delete(System.Environment.CurrentDirectory & "\temp\COH_LogInScreen_Background_temp.dds")
+            End If
+
+            imageresize()
+            trimimage()
+        End If
+    End Sub
+    Public Function overlayimage()
+
+        'If CheckBox1.Checked = True Then
+        '    imageresize()
+        'Else
+        '    trimimage()
+        'End If
+
+        Dim overlay As Bitmap = DevIL.DevIL.LoadBitmap(System.Environment.CurrentDirectory & "\overlay\frame.png")
+        'Dim screen As Bitmap = DevIL.DevIL.LoadBitmap(System.Environment.CurrentDirectory & "\temp\output.png")
+        Dim newimage As Bitmap
+        If imageresize() Is Nothing Then
+            newimage = trimimage()
+        Else
+            newimage = imageresize()
+        End If
+
+        Dim g As Graphics = Graphics.FromImage(newimage)
+        'g.DrawImage(Screen, 0, 0)
+        g.DrawImage(overlay, 0, 0)
+
+        newimage = CropImage(newimage, New Size(1024, 1024), New Point(0, 0))
+
+        pictureBox.Image = CropImage(newimage, New Size(1024, 768), New Point(0, 0))
+        If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
+            File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
+        End If
+        DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", newimage)
+        g.Dispose()
+    End Function
+
+    Public Function imageresize()
+        If CheckBox1.Checked = True Then
+            CheckBox3.Checked = False
+            If Not original Is Nothing Then
+                Dim resized As Image = ResizeImage(original, New Size(1024, 768), False)
+
+                Dim memStream As MemoryStream = New MemoryStream()
+                resized.Save(memStream, ImageFormat.Bmp)
+                m_bmp = resized
+                If Not (m_bmp Is Nothing) Then
+                    pictureBox.Image = CropImage(resized, New Size(1024, 768), New Point(0, 0))
+                    Button2.Visible = True
+                End If
+                DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
+                Return m_bmp
+            End If
+        End If
+    End Function
+
+    Public Function trimimage()
+        If CheckBox3.Checked = True Then
+            CheckBox1.Checked = False
+            If Not original Is Nothing Then
+                'Dim resized As Image = ResizeImage(original, New Size(1024, 768), New Size(1024, 1024), False)
+
+                Dim resized As Image = TransformImage(ResizeImage(original, New Size(1024, 1024), True), 1024, 1024)
+
+                Dim memStream As MemoryStream = New MemoryStream()
+                resized.Save(memStream, ImageFormat.Bmp)
+                m_bmp = resized
+                If Not (m_bmp Is Nothing) Then
+                    pictureBox.Image = CropImage(resized, New Size(1024, 768), New Point(0, 0))
+                    Button2.Visible = True
+                End If
+                DevIL.DevIL.SaveBitmap(System.Environment.CurrentDirectory & "\temp\output.png", m_bmp)
+                Return m_bmp
+            End If
+        End If
+    End Function
 
 End Class

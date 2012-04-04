@@ -113,32 +113,74 @@ Module Module1
         End Try
     End Sub
 
-    Public Function ResizeImage(ByVal image As Image, ByVal size As Size, ByVal size2 As Size, Optional ByVal preserveAspectRatio As Boolean = True) As Image
+    'Public Function ResizeImage(ByVal image As Image, ByVal size As Size, ByVal size2 As Size, Optional ByVal preserveAspectRatio As Boolean = True) As Image
+    '    Dim newWidth As Integer
+    '    Dim newHeight As Integer
+
+    '    If preserveAspectRatio Then
+    '        Dim originalWidth As Integer = image.Width
+    '        Dim originalHeight As Integer = image.Height
+    '        Dim percentWidth As Single = CSng(size.Width) / CSng(originalWidth)
+    '        Dim percentHeight As Single = CSng(size.Height) / CSng(originalHeight)
+    '        Dim percent As Single = If(percentHeight > percentWidth, percentHeight, percentWidth)
+    '        newWidth = CInt(originalWidth * percent)
+    '        newHeight = CInt(originalHeight * percent)
+    '    Else
+
+    '        newWidth = size2.Width
+    '        newHeight = size2.Height
+    '    End If
+    '    Dim newImage As New Bitmap(newWidth, newHeight, PixelFormat.Format32bppArgb)
+    '    Dim rect As New Rectangle(0, 0, size.Width, size.Height)
+    '    'Dim bmpData As System.Drawing.Imaging.BitmapData = newImage.LockBits(rect, Drawing.Imaging.ImageLockMode.ReadWrite, newImage.PixelFormat)
+    '    Using graphicsHandle As Graphics = Graphics.FromImage(newImage)
+    '        graphicsHandle.InterpolationMode = InterpolationMode.HighQualityBicubic
+    '        graphicsHandle.DrawImage(image, 0, 0, size.Width, size.Height)
+    '    End Using
+    '    Return newImage
+    'End Function
+
+
+    Public Function ResizeImage(ByVal image As Image, _
+  ByVal size As Size, Optional ByVal preserveAspectRatio As Boolean = True) As Image
         Dim newWidth As Integer
         Dim newHeight As Integer
-
         If preserveAspectRatio Then
             Dim originalWidth As Integer = image.Width
             Dim originalHeight As Integer = image.Height
             Dim percentWidth As Single = CSng(size.Width) / CSng(originalWidth)
             Dim percentHeight As Single = CSng(size.Height) / CSng(originalHeight)
-            Dim percent As Single = If(percentHeight > percentWidth, percentHeight, percentWidth)
+            Dim percent As Single = If(percentHeight < percentWidth, percentHeight, percentWidth)
             newWidth = CInt(originalWidth * percent)
             newHeight = CInt(originalHeight * percent)
         Else
-
-            newWidth = size2.Width
-            newHeight = size2.Height
+            newWidth = size.Width
+            newHeight = size.Height
         End If
-        Dim newImage As New Bitmap(newWidth, newHeight, PixelFormat.Format32bppArgb)
-        Dim rect As New Rectangle(0, 0, size.Width, size.Height)
-        'Dim bmpData As System.Drawing.Imaging.BitmapData = newImage.LockBits(rect, Drawing.Imaging.ImageLockMode.ReadWrite, newImage.PixelFormat)
+        Dim hoffset As Integer = 0
+        Dim voffset As Integer = 0
+
+        If image.Width < 1024 Then
+            hoffset = (size.Width - newWidth) / 2
+        End If
+
+        If image.Height < 768 Then
+            voffset = (size.Height - newHeight) / 2 / 2
+        End If
+
+        Dim newImage As Image = New Bitmap(1024, 1024)
+
         Using graphicsHandle As Graphics = Graphics.FromImage(newImage)
+            graphicsHandle.FillRegion(Brushes.Black, New Region())
+            'graphicsHandle.Clear(Color.Black)
+
             graphicsHandle.InterpolationMode = InterpolationMode.HighQualityBicubic
-            graphicsHandle.DrawImage(image, 0, 0, size.Width, size.Height)
+            'graphicsHandle.PixelOffsetMode = PixelOffsetMode.None
+            graphicsHandle.DrawImage(image, hoffset, voffset, newWidth, newHeight)
         End Using
         Return newImage
     End Function
+
 
     ''' <summary>
     ''' Convert an image to array of bytes
