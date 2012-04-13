@@ -5,6 +5,18 @@
 	<md5>5206ebd4e1015c34f7ca8722bb9e3f9d</md5>
 </file>
 <file>
+	<filename>\headers\COH_LogInScreen_Background_French.header</filename>
+	<md5>cce2732ba58e24f206068ca5f5fca381</md5>
+</file>
+<file>
+	<filename>\headers\COH_LogInScreen_Background_German.header</filename>
+	<md5>877cc4c67b9e55ef6ca34f23db44e430</md5>
+</file>
+<file>
+	<filename>\headers\COH_LogInScreen_Background_UK.header</filename>
+	<md5>887dfbd07367f888108d862062524636</md5>
+</file>
+<file>
 	<filename>\overlay\frame.png</filename>
 	<md5>a84594b8111be3ab364a7fdecfc530ca</md5>
 </file>

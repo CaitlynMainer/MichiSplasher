@@ -14,13 +14,15 @@ Public Class Form1
     Private m_bmp As Bitmap
     Dim original As Image
     Dim cohpath As String
+    Dim gamelocale As String
     Dim url As String = "http://pc-logix.com/neosplasher/"
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Not Directory.Exists(System.Environment.CurrentDirectory & "\temp") Then
             Directory.CreateDirectory(System.Environment.CurrentDirectory & "\temp")
         End If
+        ComboBox1.SelectedItem = "US"
         DownloadFile(url & "md5.xml", CurDir() & "/md5.xml")
-        Dim ver As String = "0.1.8"
+        Dim ver As String = "0.2.2"
         Me.Text = "NeoSplasher Version: " & ver
         Dim updaterversion As String = LoadSiteContent(url & "version.ini")
         If updaterversion > ver Then
@@ -32,9 +34,19 @@ Public Class Form1
             Thread.Sleep(2000)
             Me.Close()
         End If
+
+
         cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\CoH\", "Installation Directory")
         If cohpath = "" Then
             cohpath = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\EUCoH\", "Installation Directory")
+            gamelocale = GetRegValue(RegistryHive.CurrentUser, "SOFTWARE\Cryptic\EUCoH\", "locale")
+            If gamelocale = "4147" Then
+                ComboBox1.SelectedItem = "UK"
+            ElseIf gamelocale = "4145" Then
+                ComboBox1.SelectedItem = "DE"
+            ElseIf gamelocale = "4150" Then
+                ComboBox1.SelectedItem = "FR"
+            End If
         End If
 
         If cohpath = "" Then
@@ -147,7 +159,8 @@ Public Class Form1
             CheckBox3.Visible = True
             CheckBox1.Checked = True
             CheckBox2.Checked = False
-
+            Label1.Visible = True
+            ComboBox1.Visible = True
 
 
             If Not original Is Nothing Then
@@ -170,7 +183,7 @@ Public Class Form1
 
         Dim proc As Process = New Process
         proc.StartInfo.FileName = System.Environment.CurrentDirectory & "/nvcompress.exe"
-        proc.StartInfo.Arguments() = "-rgb -nomips ""temp\output.png"" ""temp\COH_LogInScreen_Background_temp.dds"""
+        proc.StartInfo.Arguments() = "-dxt1 -nomips ""temp\output.png"" ""temp\COH_LogInScreen_Background_temp.dds"""
         proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         proc.Start()
         proc.WaitForExit()
@@ -179,7 +192,15 @@ Public Class Form1
             Directory.CreateDirectory(TextBox1.Text & "\data\texture_library\GUI\CREATION\HybridUI\LoginScreen\")
         End If
 
-        MergeFiles(TextBox1.Text & "\data\texture_library\GUI\CREATION\HybridUI\LoginScreen\COH_LogInScreen_Background.texture", System.Environment.CurrentDirectory & "/headers/COH_LogInScreen_Background.header", System.Environment.CurrentDirectory & "/temp/COH_LogInScreen_Background_temp.dds")
+        If ComboBox1.SelectedItem = "US" Then
+            MergeFiles(TextBox1.Text & "\data\texture_library\GUI\CREATION\HybridUI\LoginScreen\COH_LogInScreen_Background.texture", System.Environment.CurrentDirectory & "/headers/COH_LogInScreen_Background.header", System.Environment.CurrentDirectory & "/temp/COH_LogInScreen_Background_temp.dds")
+        ElseIf ComboBox1.SelectedItem = "EU" Then
+            MergeFiles(TextBox1.Text & "\data\texture_library\GUI\CREATION\HybridUI\LoginScreen\COH_LogInScreen_Background_UK.texture", System.Environment.CurrentDirectory & "/headers/COH_LogInScreen_Background_UK.header", System.Environment.CurrentDirectory & "/temp/COH_LogInScreen_Background_temp.dds")
+        ElseIf ComboBox1.SelectedItem = "FR" Then
+            MergeFiles(TextBox1.Text & "\data\texture_library\GUI\CREATION\HybridUI\LoginScreen\COH_LogInScreen_Background_French.texture", System.Environment.CurrentDirectory & "/headers/COH_LogInScreen_Background_French.header", System.Environment.CurrentDirectory & "/temp/COH_LogInScreen_Background_temp.dds")
+        ElseIf ComboBox1.SelectedItem = "DE" Then
+            MergeFiles(TextBox1.Text & "\data\texture_library\GUI\CREATION\HybridUI\LoginScreen\COH_LogInScreen_Background_German.texture", System.Environment.CurrentDirectory & "/headers/COH_LogInScreen_Background_German.header", System.Environment.CurrentDirectory & "/temp/COH_LogInScreen_Background_temp.dds")
+        End If
 
         If File.Exists(System.Environment.CurrentDirectory & "\temp\output.png") Then
             File.Delete(System.Environment.CurrentDirectory & "\temp\output.png")
